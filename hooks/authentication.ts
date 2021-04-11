@@ -11,6 +11,7 @@ export function useAuthentication() {
   const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
+    console.log('Start useEffect');
     firebase
       .auth()
       .signInAnonymously()
@@ -20,6 +21,7 @@ export function useAuthentication() {
 
     firebase.auth().onAuthStateChanged((firebaseUser) => {
       if (firebaseUser) {
+        console.log('Set user');
         setUser({
           uid: firebaseUser.uid,
           isAnonymous: firebaseUser.isAnonymous,

@@ -1,20 +1,24 @@
-import Head from 'next/head'
-import { useAuthentication } from '../hooks/authentication'
-import styles from '../styles/Home.module.css'
+import Link from 'next/link';
+import Head from 'next/head';
+import { useAuthentication } from '../hooks/authentication';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
-  const { user } = useAuthentication()
+  const { user } = useAuthentication();
   return (
     <div className={styles.container}>
       <Head>
         <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel='icon' href='/favicon.ico' />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome to <a href='https://nextjs.org'>Next.js!</a>
         </h1>
+        <Link href='page2'>
+          <a>Go to page2</a>
+        </Link>
         <p>{user?.uid || '未ログイン'}</p>
 
         <p className={styles.description}>
@@ -23,18 +27,18 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
+          <a href='https://nextjs.org/docs' className={styles.card}>
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
           </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
+          <a href='https://nextjs.org/learn' className={styles.card}>
             <h3>Learn &rarr;</h3>
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
 
           <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
+            href='https://github.com/vercel/next.js/tree/master/examples'
             className={styles.card}
           >
             <h3>Examples &rarr;</h3>
@@ -42,7 +46,7 @@ export default function Home() {
           </a>
 
           <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
             className={styles.card}
           >
             <h3>Deploy &rarr;</h3>
@@ -55,14 +59,14 @@ export default function Home() {
 
       <footer className={styles.footer}>
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          href='https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app'
+          target='_blank'
+          rel='noopener noreferrer'
         >
           Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
+          <img src='/vercel.svg' alt='Vercel Logo' className={styles.logo} />
         </a>
       </footer>
     </div>
-  )
+  );
 }
