@@ -13,6 +13,7 @@ export default function UserShow() {
 
   useEffect(() => {
     if (query.uid === undefined) {
+      console.log('undefined')
       return
     }
     async function loadUser() {
@@ -23,6 +24,7 @@ export default function UserShow() {
         .get()
 
       if (!doc.exists) {
+        console.log('not exists!')
         return
       }
 
@@ -33,5 +35,33 @@ export default function UserShow() {
     loadUser()
   }, [query.uid])
 
-  return <div>{user ? user.name : 'ロード中...'}</div>
+  return (
+    <div>
+      <nav
+        className='navbar navbar-expand-lg navbar-light mb-3'
+        style={{ backgroundColor: '#e3f2fd' }}
+      >
+        <div className='container'>
+          <div className='mr-auto'>
+            <a href='#' className='navbar-brand'>
+              Navbar
+            </a>
+          </div>
+          <form className='d-flex'>
+            <button className='btn btn-outline-primary' type='submit'>
+              Search
+            </button>
+          </form>
+        </div>
+      </nav>
+      <div className='container'>
+        {user && (
+          <div className='text-center'>
+            <h1 className='h4'>{user.name}さんのページ</h1>
+            <div className='m-5'>{user.name}さんに質問しよう！</div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
