@@ -3,6 +3,7 @@ import firebase from 'firebase/app'
 import Layout from '../../components/Layout'
 import { useAuthentication } from '../../hooks/authentication'
 import { Question } from '../../models/Question'
+import dayjs from 'dayjs'
 
 export default function QuestionReceived() {
   const [questions, setQuestions] = useState<Question[]>([])
@@ -21,6 +22,7 @@ export default function QuestionReceived() {
         .firestore()
         .collection('questions')
         .where('receiverUid', '==', user.uid)
+        .orderBy('createdAt', 'desc')
         .get()
 
       if (snapshot.empty) {
@@ -48,6 +50,13 @@ export default function QuestionReceived() {
             <div className='card my-3' key={question.id}>
               <div className='card-body'>
                 <div className='text-truncate'>{question.body}</div>
+              </div>
+              <div className='text-muted text-end'>
+                <small>
+                  {dayjs(question.createdAt.toDate()).format(
+                    'YYYY/MM/DD HH:mm'
+                  )}
+                </small>
               </div>
             </div>
           ))}
