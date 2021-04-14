@@ -17,6 +17,7 @@ export default function QuestionReceived() {
       .firestore()
       .collection('questions')
       .where('receiverUid', '==', user.uid)
+      .orderBy('createdAt', 'desc')
       .limit(10)
   }
 
@@ -35,19 +36,12 @@ export default function QuestionReceived() {
     const snapshot = await createBaseQuery().get()
 
     if (snapshot.empty) {
+      setIsPaginationFinished(true)
       return
     }
 
     appendQuestions(snapshot)
   }
-  useEffect(() => {
-    if (!process.browser) {
-      return
-    }
-    if (user === null) {
-      return
-    }
-  }, [process.browser, user])
 
   async function loadNextQuestions() {
     if (questions.length === 0) {
@@ -65,6 +59,41 @@ export default function QuestionReceived() {
 
     appendQuestions(snapshot)
   }
+  useEffect(() => {
+    if (!process.browser) {
+      return
+    }
+    if (user === null) {
+      return
+    }
+
+    loadQuestions()
+  }, [process.browser, user])
+
+  function onScroll() {
+    if (isPaginationFinished) {
+      return
+    }
+
+    const contaier = scrollContainerRef.current
+    if (contaier === null) {
+      return
+    }
+
+    const rect = contaier.getBoundingClientRect()
+    if (rect.top + rect.height > window.innerHeight) {
+      return
+    }
+
+    loadNextQuestions()
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [questions, scrollContainerRef.current, isPaginationFinished])
 
   return (
     <Layout>
