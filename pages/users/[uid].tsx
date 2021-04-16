@@ -16,6 +16,25 @@ export default function UserShow() {
   const router = useRouter()
   const query = router.query as Query
 
+  // useEffect(() => {
+  //   async function loadUser() {
+  //     const doc = await firebase
+  //       .firestore()
+  //       .collection('users')
+  //       .doc(query.uid)
+  //       .get()
+
+  //     if (!doc.exists) {
+  //       return
+  //     }
+
+  //     const gotUser = doc.data() as User
+  //     gotUser.uid = doc.id
+  //     setUser(gotUser)
+  //   }
+  //   loadUser()
+  // }, [])
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsSending(true)
@@ -47,6 +66,7 @@ export default function UserShow() {
       return
     }
     async function loadUser() {
+      console.log(query)
       const doc = await firebase
         .firestore()
         .collection('users')
@@ -61,6 +81,7 @@ export default function UserShow() {
       const gotUser = doc.data() as User
       gotUser.uid = doc.id
       setUser(gotUser)
+      console.log(gotUser.uid)
     }
     loadUser()
   }, [query.uid])
@@ -68,7 +89,7 @@ export default function UserShow() {
   return (
     <div>
       <Layout>
-        {user && (
+        {user && firebase.auth().currentUser && (
           <div className='text-center'>
             <h1 className='h4'>{user.name}さんのページ</h1>
             <div className='m-5'>{user.name}さんに質問しよう！</div>
@@ -77,27 +98,31 @@ export default function UserShow() {
       </Layout>
       <div className='row justify-content-center mb-3'>
         <div className='col-12 col-md-6'>
-          <form onSubmit={onSubmit}>
-            <textarea
-              className='form-control'
-              placeholder='お元気ですか？'
-              rows={6}
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              required
-            ></textarea>
-            <div className='m-3'>
-              {isSending ? (
-                <div className='spinner-border text-secondary' role='status'>
-                  <span className='visually-hidden'>Loading...</span>
-                </div>
-              ) : (
-                <button type='submit' className='btn btn-primary'>
-                  質問を送信する
-                </button>
-              )}
-            </div>
-          </form>
+          {user && user.uid === firebase.auth().currentUser.uid ? (
+            <div>自分には送信できません。</div>
+          ) : (
+            <form onSubmit={onSubmit}>
+              <textarea
+                className='form-control'
+                placeholder='お元気ですか？'
+                rows={6}
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                required
+              ></textarea>
+              <div className='m-3'>
+                {isSending ? (
+                  <div className='spinner-border text-secondary' role='status'>
+                    <span className='visually-hidden'>Loading...</span>
+                  </div>
+                ) : (
+                  <button type='submit' className='btn btn-primary'>
+                    質問を送信する
+                  </button>
+                )}
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>
