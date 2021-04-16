@@ -7,6 +7,12 @@ type Props = {
   question: Question
 }
 
+export async function getServerSideProps({ query }) {
+  const res = await fetch(process.env.API_URL + `/api/answers/${query.id}`)
+  const json = await res.json()
+  return { props: json }
+}
+
 export default function AnswersShow(props: Props) {
   return (
     <Layout>
